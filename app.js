@@ -1,4 +1,4 @@
-const {initOpenTelemetry} = require('./lib/runtime-insights.js');
+const { CodeCovOpenTelemetry }  = require('./lib/runtime-insights.js');
 
 const express = require('express');
 const port = 3000;
@@ -10,9 +10,7 @@ repositoryToken = 1;
 sampleRate = 1;
 untrackedExportRate = 1;
 code = 'something'
-
-
-provider = initOpenTelemetry(repositoryToken, sampleRate, untrackedExportRate, code)
+const codecov = new CodeCovOpenTelemetry(repositoryToken, sampleRate, untrackedExportRate, code)
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
