@@ -1,4 +1,4 @@
-require('./lib/runtime-insights.js');
+const {initOpenTelemetry} = require('./lib/runtime-insights.js');
 
 const express = require('express');
 const port = 3000;
@@ -6,6 +6,13 @@ const app = express();
 
 // OTEL setup stuff
 // use codecov exporter
+repositoryToken = 1;
+sampleRate = 1;
+untrackedExportRate = 1;
+code = 'something'
+
+
+provider = initOpenTelemetry(repositoryToken, sampleRate, untrackedExportRate, code)
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
