@@ -13,7 +13,7 @@ Install dependencies:
 Set environment variable for coverage export. You will not need to access this directory
 yourself, but the application will read coverage reports from this directory:
 
-`export NODE_V8_COVERAGE=<something very random>`
+`export NODE_V8_COVERAGE=codecov_reports`
 
 Run application
 
