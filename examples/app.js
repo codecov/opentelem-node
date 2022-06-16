@@ -4,9 +4,9 @@ const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
 const { SpanKind } = require("@opentelemetry/api");
 
 // OTEL setup logic
-sampleRate = 1;
-untrackedExportRate = 1;
-code = 'production::v2'
+const sampleRate = 1;
+const untrackedExportRate = 1;
+const code = 'production::v2'
 
 const provider = new NodeTracerProvider();
 provider.register();
