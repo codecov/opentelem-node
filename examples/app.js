@@ -45,7 +45,7 @@ app.get('/hello', (req, res) => {
     console.log(a);
     let b = 45;
     if (a == 0) {
-      console.log("bananas");
+      console.log("a is 0");
     }
     if (a > 10) {
       b = b + 1;
