@@ -2,7 +2,7 @@
   "name": "codecov-opentelem-node",
   "version": "0.1.0",
   "description": "",
-  "main": "app.js",
+  "main": "lib/runtime-insights.js",
   "scripts": {
     "test": "jest"
   },
