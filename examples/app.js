@@ -48,10 +48,8 @@ app.get('/hello', (req, res) => {
       console.log("bananas");
     }
     if (a > 10) {
-      console.log("HERE")
       b = b + 1;
       if (a < 50) {
-        console.log("ALSO HERE")
         a = a + 2;
         res.send('SPECIAL Hello ' + req.query.name + req.query.value);
         return;
