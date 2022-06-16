@@ -1,5 +1,5 @@
 const { CodeCovOpenTelemetry }  = require('../lib/runtime-insights.js');
-const { NodeTracerProvider } = require('@opentelemetry/node');
+const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
 const { SpanKind } = require("@opentelemetry/api");
 
