@@ -1,13 +1,13 @@
 {
-  "name": "codecov-opentelem-node",
+  "name": "@codecov/opentelem-node",
   "version": "0.1.0",
+  "license": "MIT",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "jest"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "@opentelemetry/api": "^1.0.4",
     "@opentelemetry/core": "0.12.0",
