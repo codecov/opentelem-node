@@ -39,7 +39,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/hello', (req, res) => {
-  console.log("WE ARE INSIDE THE REQUEST")
   // console.dir(provider);
   if (req.query.name != undefined) {
     let a = parseInt(req.query.value);
