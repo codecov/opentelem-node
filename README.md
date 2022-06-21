@@ -1,4 +1,6 @@
-# Critical paths with NODE_V8_COVERAGE
+# Node Codecov OpenTelementry
+
+This package is intended to support Codecov's [Impact Analysis](https://docs.codecov.com/docs/impact-analysis) feature. 
 
 Note that this packaged requires, at minimum, Node 15.1.0 due to the inclusion of v8.takeCoverage(). see
 [https://nodejs.org/api/v8.html#v8_v8_takecoverage](https://nodejs.org/api/v8.html#v8_v8_takecoverage).
