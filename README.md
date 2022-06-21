@@ -2,7 +2,7 @@
 
 This package is intended to support Codecov's [Impact Analysis](https://docs.codecov.com/docs/impact-analysis) feature. 
 
-Note that this packaged requires, at minimum, Node 15.1.0 due to the inclusion of v8.takeCoverage(). see
+Note that this packaged requires, at minimum, Node 15.1.0 due to the inclusion of v8.takeCoverage(). See
 [https://nodejs.org/api/v8.html#v8_v8_takecoverage](https://nodejs.org/api/v8.html#v8_v8_takecoverage).
 
 ## Setup
@@ -30,9 +30,9 @@ will not have the interface to V8 required to collect traces.
 
 The following code should be used in the startup of your application, typically this is `app.js`. For a basic express app, it would look as follows:
 
-```
+```js
 // Include Dependencies
-const { CodeCovOpenTelemetry }  = require('../lib/runtime-insights.js');
+const { CodeCovOpenTelemetry }  = require('@codecov/node-codecov-opentelemetry');
 const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
 const { SpanKind } = require("@opentelemetry/api");
@@ -66,7 +66,7 @@ provider.addSpanProcessor(new BatchSpanProcessor(codecov.exporter))
 ```
 Once initialized, your application can continue as expected:
 
-```
+```js
 //...example express setup
 const express = require('express');
 const port = 3000;
@@ -88,9 +88,9 @@ This package relies heavily on the `takeCoverage` and other supporting methods a
     - Initial experiments do not indicate a significant hit to performance, likely due to `takeCoverage()` _et al_ being native. 
 2. There seems to be no way to avoid the disk-write in a naive way
     - If `NODE_V8_COVERAGE` could be mapped to memory, that could be more performant solution.
-3. Getting the saved filename is a bit error-prone. We can't know for sure what the filename will be because it's generated on the fly: https://github.com/nodejs/node/blob/c18ad4b01297548582a04000aae5ba7d862377f5/src/inspector_profiler.cc#L172 So there is the possibility that at some point race conditions may occur, although this is not likely.
+3. Getting the saved filename is a bit error-prone. We can't know for sure what the filename will be because it's generated on the fly. See: [https://github.com/nodejs/node/.../src/inspector_profiler.cc#L172](https://github.com/nodejs/node/blob/c18ad4b01297548582a04000aae5ba7d862377f5/src/inspector_profiler.cc#L172) So there is the possibility that at some point race conditions may occur, although this is not likely.
 4. There seems to be a bug in node opentelem in that calls `spancontext` as a function, but that is not a function. Before fielding this in a production context, opentelemetry-js will need a fix.
-    - example of incorrect use: https://github.com/open-telemetry/opentelemetry-js/blob/610808d3b64b9f660f4dd640ad961b8c9f67be66/packages/opentelemetry-sdk-trace-base/src/export/BatchSpanProcessorBase.ts#L83
+    - example of incorrect use: [https://github.com/open-telemetry/opentelemetry-js/.../src/export/BatchSpanProcessorBase.ts#L83](https://github.com/open-telemetry/opentelemetry-js/blob/610808d3b64b9f660f4dd640ad961b8c9f67be66/packages/opentelemetry-sdk-trace-base/src/export/BatchSpanProcessorBase.ts#L83)
     
 5. There are some minor concerns with block coverage versus line coverage. For example, the output from the profiler is in the format:
 ```
@@ -114,13 +114,14 @@ This package relies heavily on the `takeCoverage` and other supporting methods a
         }
         // ...
 ```
+
 which shows byte ranges (1062 to 1107 in this case). This means that coverage is on the statement block level, rather than line coverage. To compensate for this discrepancy, for now, this package assumes that if bytes A to B involve lines C to D, then all lines from C to D are covered. 
 6. This package assumes that the "byte intervals" that show up in node coverage are presented in pre-order when looking at the interval tree. This package makes no assumption that byte intervals are presented in pre-order, and thus will reorder if needed, However, the package still assumes they are tree intervals and that there will be no unusual overlaps (as in, two intervals that overlap but are not contained one inside another).
 
 ### OpenTelemetry Caveats
 1. Due to the nature of async js, opentelemetry tracks the request from the moment it is received until the moment of response. So for example, on:
 
-```
+```js
 app.get('/hello', (req, res) => {
   console.log("WE ARE INSIDE THE REQUEST")
   res.send('SPECIAL Hello ' + req.query.name + req.query.value);
