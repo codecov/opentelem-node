@@ -8,14 +8,14 @@ Note that this packaged requires, at minimum, Node 15.1.0 due to the inclusion o
 
 Install dependencies:
 
-`npm install`
+`npm install @codecov/node-codecov-opentelemetry`
 
 Set environment variable for coverage export. You will not need to access this directory
 yourself, but the application will read coverage reports from this directory:
 
 `export NODE_V8_COVERAGE=codecov_reports`
 
-Run application
+An example application is included in this repository, it can be run as follows:
 
 ```
 node examples/app.js
@@ -23,6 +23,58 @@ node examples/app.js
 
 **IMPORTANT:** Be sure you're running Node JS 15.1 or above. Any version beneath this one
 will not have the interface to V8 required to collect traces.
+
+## Basic Setup
+
+The following code should be used in the startup of your application, typically this is `app.js`. For a basic express app, it would look as follows:
+
+```
+// Include Dependencies
+const { CodeCovOpenTelemetry }  = require('../lib/runtime-insights.js');
+const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
+const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
+const { SpanKind } = require("@opentelemetry/api");
+
+// Setup OpenTelemetry
+const sampleRate = 1;
+const untrackedExportRate = 1;
+const code = 'production::v0.0.1' //<environment>::<versionIdentifier>
+const provider = new NodeTracerProvider();
+provider.register();
+
+// Setup Codecov OTEL
+const codecov = new CodeCovOpenTelemetry(
+  {
+    repositoryToken: "your-impact-analysis-token", //from repository settings page on Codecov.
+    environment: "production", //or others as appropriate
+    versionIdentifier: "v0.0.1", //semver, commit SHA, etc
+    filters: {
+      allowedSpanKinds: [SpanKind.SERVER],
+    },
+    codecovEndpoint: "https://api.codecov.io",
+    sampleRate,
+    untrackedExportRate,
+    code
+  }
+)
+
+provider.addSpanProcessor(codecov.processor);
+provider.addSpanProcessor(new BatchSpanProcessor(codecov.exporter))
+
+```
+Once initialized, your application can continue as expected:
+
+```
+//...example express setup
+const express = require('express');
+const port = 3000;
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+})
+
+```
 
 ## Current Caveats and Limitations
 
@@ -79,7 +131,7 @@ app.get('/hello', (req, res) => {
 }
 ```
 
-Opentelemetry will execute `onEnd` right after `res.send` happens. Which means that it won't wait for the extra logic to run. 
+Opentelemetry will execute `onEnd` right after `res.send` happens. Which means that it won't wait for the extra logic to run.
 2. JS coverage output doesn't seem to split a 'stataments block' into two when needed. The idea is that two consecutive statements, unless separated by an if/while/return/etc, are always either both executed or neither.
     - So, still on the above example, lines 68 (`let a ...;`) and 69 (`let b = ...;`) are in the same statement block as line 66 (`console.log("WE...")`). Due to the async nature of js, coverage stopped tracking before they were executed, so they should not show up on the coverage result. But they do, because since line 66 was executed, and they are part of the same statement block, it doesn't make sense for them to not have been executed.
     - While this is generally preferred, problems do arise in some cases. Consider the `if` statement on line 70, for example. Line 71 (`console.log("It's higher...")`) also clearly runs on some cases (where `a > 10`), but is always considered not covered on the reports, because it is on a separate statement block and happens after a `res.send`.

@@ -6,20 +6,20 @@ const { SpanKind } = require("@opentelemetry/api");
 // OTEL setup logic
 const sampleRate = 1;
 const untrackedExportRate = 1;
-const code = 'production::v2'
+const code = 'production::v0.0.1' //<environment>::<versionIdentifier>
 
 const provider = new NodeTracerProvider();
 provider.register();
 
 const codecov = new CodeCovOpenTelemetry(
   {
-    repositoryToken: "c9efdfba42b1209a855071a32672c9017989c01e", // local key, no security risk
-    environment: "production",
-    versionIdentifier: "v2",
+    repositoryToken: "your-impact-analysis-token", //from repository settings page on Codecov.
+    environment: "production", //or others as appropriate
+    versionIdentifier: "v0.0.1", //semver
     filters: {
       allowedSpanKinds: [SpanKind.SERVER],
     },
-    codecovEndpoint: "localhost",
+    codecovEndpoint: "https://api.codecov.io",
     sampleRate,
     untrackedExportRate,
     code
