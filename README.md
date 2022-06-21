@@ -135,6 +135,7 @@ app.get('/hello', (req, res) => {
 ```
 
 Opentelemetry will execute `onEnd` right after `res.send` happens. Which means that it won't wait for the extra logic to run.
+
 2. JS coverage output doesn't seem to split a 'stataments block' into two when needed. The idea is that two consecutive statements, unless separated by an if/while/return/etc, are always either both executed or neither.
     - So, still on the above example, lines 68 (`let a ...;`) and 69 (`let b = ...;`) are in the same statement block as line 66 (`console.log("WE...")`). Due to the async nature of js, coverage stopped tracking before they were executed, so they should not show up on the coverage result. But they do, because since line 66 was executed, and they are part of the same statement block, it doesn't make sense for them to not have been executed.
     - While this is generally preferred, problems do arise in some cases. Consider the `if` statement on line 70, for example. Line 71 (`console.log("It's higher...")`) also clearly runs on some cases (where `a > 10`), but is always considered not covered on the reports, because it is on a separate statement block and happens after a `res.send`.
