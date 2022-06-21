@@ -1,6 +1,7 @@
 {
-  "name": "codecov-opentelem-node",
+  "name": "@codecov/opentelem-node",
   "version": "0.1.0",
+  "license": "MIT",
   "description": "",
   "main": "lib/runtime-insights.js",
   "scripts": {
@@ -8,7 +9,6 @@
     "testcov": "jest --collect-coverage"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "@opentelemetry/api": "^1.0.4",
     "@opentelemetry/core": "0.12.0",
