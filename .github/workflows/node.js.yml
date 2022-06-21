@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, publish_to_npm ]
   pull_request:
 
 jobs:
@@ -34,3 +34,9 @@ jobs:
         files: ./coverage/clover.xml
         flags: unittests 
         verbose: true
+    - run: npm test
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        dry-run: true
+        greater-version-only: true
