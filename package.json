@@ -4,7 +4,8 @@
   "description": "",
   "main": "lib/runtime-insights.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "testcov": "jest --collect-coverage"
   },
   "author": "",
   "license": "ISC",
