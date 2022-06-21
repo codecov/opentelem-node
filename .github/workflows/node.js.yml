@@ -33,9 +33,3 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage/clover.xml
         flags: unittests 
-        verbose: true
-    - run: npm test
-    - uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_TOKEN }}
-        dry-run: true
