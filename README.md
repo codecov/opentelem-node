@@ -53,7 +53,7 @@ const codecov = new CodeCovOpenTelemetry(
     filters: {
       allowedSpanKinds: [SpanKind.SERVER],
     },
-    codecovEndpoint: "https://api.codecov.io",
+    codecovEndpoint: "api.codecov.io",
     sampleRate,
     untrackedExportRate,
     code
