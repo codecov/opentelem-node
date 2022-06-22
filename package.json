@@ -1,6 +1,6 @@
 {
   "name": "@codecov/node-codecov-opentelemetry",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "description": "",
   "main": "lib/runtime-insights.js",
