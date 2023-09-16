@@ -28,13 +28,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run testcov
-<<<<<<< Updated upstream
-    - uses: codecov/codecov-action@v2
-=======
-    - uses: codecov/codecov-action@v4-beta-beta-beta-beta
+    - uses: codecov/codecov-action@v4-beta
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
->>>>>>> Stashed changes
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage/clover.xml
